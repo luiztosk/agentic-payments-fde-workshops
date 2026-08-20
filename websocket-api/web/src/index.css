@@ -70,6 +70,21 @@ h1 {
   flex: none;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.online-users {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+}
+
 .status {
   font-size: 0.8rem;
   font-weight: 600;
