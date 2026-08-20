@@ -32,6 +32,17 @@ export class ConnectionRegistry {
     return client;
   }
 
+  get usernames(): string[] {
+    const counts = new Map<string, number>();
+    const result: string[] = [];
+    for (const client of this.clients.values()) {
+      const count = (counts.get(client.username) ?? 0) + 1;
+      counts.set(client.username, count);
+      result.push(count === 1 ? client.username : `${client.username}-${client.id.slice(0, 8)}`);
+    }
+    return result;
+  }
+
   get size(): number {
     return this.clients.size;
   }
