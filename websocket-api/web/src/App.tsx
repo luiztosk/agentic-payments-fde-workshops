@@ -7,11 +7,23 @@ function App() {
   const [username, setUsername] = useState("");
   const [hasJoined, setHasJoined] = useState(false);
   const [draft, setDraft] = useState("");
+  const [showUserList, setShowUserList] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
+  const userListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [bubbles]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userListRef.current && !userListRef.current.contains(event.target as Node)) {
+        setShowUserList(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   function handleJoin(event: FormEvent) {
     event.preventDefault();
@@ -57,7 +69,26 @@ function App() {
       <header className="chat-header">
         <h1>Realtime Chat</h1>
         <div className="header-right">
-          <span className="online-users">👥 {onlineUsers.length} online</span>
+          <div className="user-list-wrapper" ref={userListRef}>
+            <button
+              type="button"
+              className="online-users-trigger"
+              onClick={() => setShowUserList(!showUserList)}
+              aria-expanded={showUserList}
+              aria-label={`${onlineUsers.length} usuários online`}
+            >
+              👥 {onlineUsers.length} online
+            </button>
+            {showUserList && (
+              <ul className="user-list-dropdown" role="listbox">
+                {onlineUsers.map((user, idx) => (
+                  <li key={idx} className="user-list-item" role="option">
+                    {user}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <span className={`status status-${status}`}>{statusLabel(status)}</span>
         </div>
       </header>

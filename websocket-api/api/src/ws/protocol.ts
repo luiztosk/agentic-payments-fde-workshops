@@ -54,6 +54,7 @@ export type SystemEvent = {
 export type ChatEvent = {
   type: "chat";
   id: string;
+  userId: string;
   username: string;
   text: string;
   createdAt: string;
@@ -62,6 +63,12 @@ export type ChatEvent = {
 export type PresenceEvent = {
   type: "presence";
   usernames: string[];
+}
+
+export type JoinedEvent = {
+  type: "joined";
+  userId: string;
+  username: string;
 }
 
 /**
@@ -74,4 +81,4 @@ export type AgentStartEvent = { type: "agent_start"; id: string };
 export type AgentChunkEvent = { type: "agent_chunk"; id: string; text: string };
 export type AgentEndEvent = { type: "agent_end"; id: string };
 
-export type ServerEvent = SystemEvent | ChatEvent | PresenceEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent;
+export type ServerEvent = SystemEvent | ChatEvent | PresenceEvent | JoinedEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent;
