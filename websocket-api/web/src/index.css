@@ -70,6 +70,78 @@ h1 {
   flex: none;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-list-wrapper {
+  position: relative;
+}
+
+.online-users-trigger {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background-color 0.15s ease;
+}
+
+.online-users-trigger:hover {
+  background: #e5e7eb;
+}
+
+.online-users-trigger:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.user-list-dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  min-width: 180px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.4rem;
+  margin: 0;
+  list-style: none;
+  z-index: 100;
+}
+
+.user-list-item {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: #1f2937;
+  border-radius: 6px;
+  cursor: default;
+  transition: background-color 0.1s ease;
+}
+
+.user-list-item:hover {
+  background: #f3f4f6;
+}
+
+.user-list-item:first-child {
+  border-radius: 6px 6px 0 0;
+}
+
+.user-list-item:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
 .status {
   font-size: 0.8rem;
   font-weight: 600;

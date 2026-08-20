@@ -26,8 +26,10 @@ function randomId(): string {
 export function useChatSocket() {
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
   const usernameRef = useRef("");
+  const userIdRef = useRef("");
 
   useEffect(() => {
     const socket = new WebSocket(WS_URL);
@@ -53,7 +55,7 @@ export function useChatSocket() {
                 id: serverEvent.id,
                 username: serverEvent.username,
                 text: serverEvent.text,
-                mine: serverEvent.username === usernameRef.current,
+                mine: serverEvent.userId === userIdRef.current,
               },
             ];
 
@@ -74,8 +76,21 @@ export function useChatSocket() {
             return current.map((bubble) =>
               bubble.kind === "agent" && bubble.id === serverEvent.id ? { ...bubble, done: true } : bubble,
             );
+
+          default:
+            return current;
         }
       });
+
+      // Handle joined event - capture our own user ID
+      if (serverEvent.type === "joined") {
+        userIdRef.current = serverEvent.userId;
+      }
+
+      // Handle presence event - update online users list
+      if (serverEvent.type === "presence") {
+        setOnlineUsers(serverEvent.usernames);
+      }
     });
 
     // Runs twice in dev under StrictMode (mount -> cleanup -> mount): the
@@ -86,6 +101,7 @@ export function useChatSocket() {
 
   const join = useCallback((username: string) => {
     usernameRef.current = username;
+    userIdRef.current = ""; // Reset userId on new join
     socketRef.current?.send(JSON.stringify({ type: "join", username }));
   }, []);
 
@@ -93,5 +109,5 @@ export function useChatSocket() {
     socketRef.current?.send(JSON.stringify({ type: "chat", text }));
   }, []);
 
-  return { status, bubbles, join, sendChat };
+  return { status, bubbles, onlineUsers, join, sendChat };
 }

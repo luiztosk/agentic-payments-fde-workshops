@@ -40,7 +40,19 @@ export function createChatServer(server: HttpServer): ChatServer {
     if (message.type === "join") {
       const client = registry.register(socket, message.username);
       log.info("client joined", { username: client.username });
+      
+      // Send the joining client their own user ID
+      socket.send(JSON.stringify({
+        type: "joined",
+        userId: client.id,
+        username: client.username
+      }));
+      
       registry.broadcast({ type: "system", text: `${client.username} entrou no chat` });
+      registry.broadcast({
+        type: "presence",
+        usernames: registry.usernames
+      })
       return;
     }
 
@@ -53,6 +65,7 @@ export function createChatServer(server: HttpServer): ChatServer {
     registry.broadcast({
       type: "chat",
       id: randomUUID(),
+      userId: client.id,
       username: client.username,
       text: message.text,
       createdAt: new Date().toISOString(),
@@ -82,6 +95,10 @@ export function createChatServer(server: HttpServer): ChatServer {
       if (client) {
         log.info("client disconnected", { username: client.username });
         registry.broadcast({ type: "system", text: `${client.username} saiu do chat` });
+        registry.broadcast({
+          type: "presence",
+          usernames: registry.usernames
+        });
       }
     });
   });
