@@ -59,6 +59,11 @@ export type ChatEvent = {
   createdAt: string;
 };
 
+export type PresenceEvent = {
+  type: "presence";
+  usernames: string[];
+}
+
 /**
  * The agent's reply streams as three events - start, one or more chunks,
  * end - the same shape real LLM streaming APIs use (e.g. a message start,
@@ -69,4 +74,4 @@ export type AgentStartEvent = { type: "agent_start"; id: string };
 export type AgentChunkEvent = { type: "agent_chunk"; id: string; text: string };
 export type AgentEndEvent = { type: "agent_end"; id: string };
 
-export type ServerEvent = SystemEvent | ChatEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent;
+export type ServerEvent = SystemEvent | ChatEvent | PresenceEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent;
