@@ -26,6 +26,7 @@ function randomId(): string {
 export function useChatSocket() {
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const socketRef = useRef<WebSocket | null>(null);
   const usernameRef = useRef("");
 
@@ -74,8 +75,16 @@ export function useChatSocket() {
             return current.map((bubble) =>
               bubble.kind === "agent" && bubble.id === serverEvent.id ? { ...bubble, done: true } : bubble,
             );
+
+          default:
+            return current;
         }
       });
+
+      // Handle presence event - update online users list
+      if (serverEvent.type === "presence") {
+        setOnlineUsers(serverEvent.usernames);
+      }
     });
 
     // Runs twice in dev under StrictMode (mount -> cleanup -> mount): the
@@ -93,5 +102,5 @@ export function useChatSocket() {
     socketRef.current?.send(JSON.stringify({ type: "chat", text }));
   }, []);
 
-  return { status, bubbles, join, sendChat };
+  return { status, bubbles, onlineUsers, join, sendChat };
 }
