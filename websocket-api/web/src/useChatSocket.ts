@@ -27,9 +27,12 @@ export function useChatSocket() {
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [typingUser, setTypingUser] = useState<string | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const usernameRef = useRef("");
   const userIdRef = useRef("");
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastTypingSentRef = useRef<number>(0);
 
   useEffect(() => {
     const socket = new WebSocket(WS_URL);
@@ -91,6 +94,17 @@ export function useChatSocket() {
       if (serverEvent.type === "presence") {
         setOnlineUsers(serverEvent.usernames);
       }
+
+      // Handle typing event - show typing indicator with 3 second timeout
+      if (serverEvent.type === "typing") {
+        setTypingUser(serverEvent.username);
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+        typingTimeoutRef.current = setTimeout(() => {
+          setTypingUser(null);
+        }, 3000);
+      }
     });
 
     // Runs twice in dev under StrictMode (mount -> cleanup -> mount): the
@@ -109,5 +123,14 @@ export function useChatSocket() {
     socketRef.current?.send(JSON.stringify({ type: "chat", text }));
   }, []);
 
-  return { status, bubbles, onlineUsers, join, sendChat };
+  const sendTyping = useCallback(() => {
+    const now = Date.now();
+    if (now - lastTypingSentRef.current < 2000) {
+      return;
+    }
+    lastTypingSentRef.current = now;
+    socketRef.current?.send(JSON.stringify({ type: "typing" }));
+  }, []);
+
+  return { status, bubbles, onlineUsers, typingUser, join, sendChat, sendTyping };
 }
