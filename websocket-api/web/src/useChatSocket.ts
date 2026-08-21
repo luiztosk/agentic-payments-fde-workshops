@@ -62,6 +62,16 @@ export function useChatSocket() {
               },
             ];
 
+          // agent_message exibe a mensagem toda de uma vez
+          case "agent_message":
+            return [
+              ...current,
+              {
+                kind: "agent_message",
+                id: serverEvent.id,
+                text: serverEvent.text,
+              }
+            ];
           // agent_start / agent_chunk / agent_end mirror how streaming LLM
           // APIs work: a message begins, grows one delta at a time, then
           // closes - so the bubble is created once and only appended to.
