@@ -33,3 +33,24 @@ registry.broadcast({type: "presence", usernames: })
 
 usuarios com o mesmo nome aparecem corretamente na lista, porém os bubbles se confundem pq é apenas verificado o nome. Então é melhor fazer a comparação via id.
 - resolvido enviando de volta para cada cliente seu próprio ID
+
+
+## desafio 2: status "digitando..."
+
+### evento cliente -> servidor
+
+1. detectar atividade no input
+2. enviar somente 1 a cada 2 segundos
+3. exemplo `{ type: "typing" }` deve ser suficiente
+
+### evento servidor -> cliente
+
+1. receber `{ type: "typing" }`
+2. transmitir imediatamente (confiar no debounce do cliente)
+3. exemplo s->c : `{ type: "typing", username: "typer_username" }`
+
+### display no cliente
+
+1. receber evento: `{ type: "typing", username: "typer_username" }`
+2. usar um timeout de 3 segundos
+3. novo recebido reseta o timer
