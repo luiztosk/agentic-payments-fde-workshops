@@ -32,3 +32,4 @@ registry.broadcast({type: "presence", usernames: })
 ### um problema novo:
 
 usuarios com o mesmo nome aparecem corretamente na lista, porém os bubbles se confundem pq é apenas verificado o nome. Então é melhor fazer a comparação via id.
+- resolvido enviando de volta para cada cliente seu próprio ID
