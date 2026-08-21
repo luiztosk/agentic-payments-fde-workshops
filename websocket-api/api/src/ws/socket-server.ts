@@ -56,6 +56,17 @@ export function createChatServer(server: HttpServer): ChatServer {
       return;
     }
 
+    if (message.type === "typing") {
+      const client = registry.get(socket);
+      if (client) {
+        registry.broadcast({
+          type: "typing",
+          username: client.username
+        });
+      }
+      return;
+    }
+
     const client = registry.get(socket);
     if (!client) {
       log.warn("chat message received before join, ignoring");
