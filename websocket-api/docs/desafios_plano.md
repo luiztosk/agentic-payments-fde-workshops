@@ -60,3 +60,10 @@ usuarios com o mesmo nome aparecem corretamente na lista, porém os bubbles se c
 3. adicionar useState na função useChatSocket
 2. usar um timeout de 3 segundos
 3. novo recebido reseta o timer
+
+
+## desafio 4: resposta unica do @agente/sync
+
+1. implementar lado do servidor (bem parecido com o AgentReply mas sem chunking)
+2. testar no Postman
+3. implementar o recebimento do agent_message (similar ao recebimento do agent_chunk, mas talvez sera apenas como uma msg de chat normal)
