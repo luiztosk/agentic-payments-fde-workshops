@@ -4,6 +4,7 @@ export type ServerEvent =
   | { type: "chat"; id: string; userId: string; username: string; text: string; createdAt: string }
   | { type: "presence"; usernames: string[] }
   | { type: "joined"; userId: string; username: string }
+  | { type: "typing"; username: string }
   | { type: "agent_start"; id: string }
   | { type: "agent_chunk"; id: string; text: string }
   | { type: "agent_end"; id: string };

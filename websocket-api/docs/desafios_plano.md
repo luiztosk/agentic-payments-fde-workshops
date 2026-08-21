@@ -42,15 +42,21 @@ usuarios com o mesmo nome aparecem corretamente na lista, porém os bubbles se c
 1. detectar atividade no input
 2. enviar somente 1 a cada 2 segundos
 3. exemplo `{ type: "typing" }` deve ser suficiente
+4. pro servidor receber:
+   1. criar message Schema
 
 ### evento servidor -> cliente
 
 1. receber `{ type: "typing" }`
 2. transmitir imediatamente (confiar no debounce do cliente)
 3. exemplo s->c : `{ type: "typing", username: "typer_username" }`
+   1. criar tipo TypingEvent
+   2. se a msg é "typing", fazer o broadcast
 
 ### display no cliente
 
-1. receber evento: `{ type: "typing", username: "typer_username" }`
+1. criar tipo no ServerEvent
+2. receber evento: `{ type: "typing", username: "typer_username" }`
+3. adicionar useState na função useChatSocket
 2. usar um timeout de 3 segundos
 3. novo recebido reseta o timer
