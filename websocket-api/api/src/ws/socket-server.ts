@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import type { Server as HttpServer } from "http";
 import { WebSocketServer, type WebSocket } from "ws";
 import { ConnectionRegistry } from "./connection-registry";
-import { mentionsAgent, streamAgentReply } from "./agent";
+import { mentionsAgent, mentionsAgentSync, messageAgentReply, streamAgentReply } from "./agent";
 import { startHeartbeat } from "./heartbeat";
 import { parseClientMessage, type ClientMessage } from "./protocol";
 import { logger } from "../utils/logger";
@@ -82,7 +82,10 @@ export function createChatServer(server: HttpServer): ChatServer {
       createdAt: new Date().toISOString(),
     });
 
-    if (mentionsAgent(message.text)) {
+    if (mentionsAgentSync(message.text)) {
+      await messageAgentReply(registry, message.text);
+    }
+    else if (mentionsAgent(message.text)) {
       await streamAgentReply(registry, message.text);
     }
   }

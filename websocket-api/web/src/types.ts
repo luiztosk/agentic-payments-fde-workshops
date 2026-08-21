@@ -5,6 +5,7 @@ export type ServerEvent =
   | { type: "presence"; usernames: string[] }
   | { type: "joined"; userId: string; username: string }
   | { type: "typing"; username: string }
+  | { type: "agent_message"; id: string; text: string }
   | { type: "agent_start"; id: string }
   | { type: "agent_chunk"; id: string; text: string }
   | { type: "agent_end"; id: string };
@@ -13,6 +14,7 @@ export type ServerEvent =
 export type Bubble =
   | { kind: "system"; id: string; text: string }
   | { kind: "chat"; id: string; username: string; text: string; mine: boolean }
-  | { kind: "agent"; id: string; text: string; done: boolean };
+  | { kind: "agent"; id: string; text: string; done: boolean }
+  | { kind: "agent_message"; id: string; text: string };
 
 export type ConnectionStatus = "connecting" | "open" | "closed";

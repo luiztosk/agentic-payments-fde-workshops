@@ -114,6 +114,13 @@ function App() {
                 </p>
               </>
             )}
+
+            {bubble.kind === "agent_message" && (
+              <>
+                <span className="bubble-author">agente</span>
+                <p className="bubble-text">{bubble.text}</p>
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -156,7 +163,7 @@ function statusLabel(status: ConnectionStatus): string {
 
 function bubbleClassName(bubble: Bubble): string {
   if (bubble.kind === "system") return "message system";
-  if (bubble.kind === "agent") return "message agent";
+  if (bubble.kind === "agent" || bubble.kind === "agent_message") return "message agent";
   return bubble.mine ? "message mine" : "message theirs";
 }
 

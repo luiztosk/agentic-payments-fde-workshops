@@ -89,5 +89,6 @@ export type JoinedEvent = {
 export type AgentStartEvent = { type: "agent_start"; id: string };
 export type AgentChunkEvent = { type: "agent_chunk"; id: string; text: string };
 export type AgentEndEvent = { type: "agent_end"; id: string };
+export type AgentMessageEvent = { type: "agent_message"; id: string; text: string };
 
-export type ServerEvent = SystemEvent | ChatEvent | PresenceEvent | TypingEvent | JoinedEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent;
+export type ServerEvent = SystemEvent | ChatEvent | PresenceEvent | TypingEvent | JoinedEvent | AgentStartEvent | AgentChunkEvent | AgentEndEvent | AgentMessageEvent;

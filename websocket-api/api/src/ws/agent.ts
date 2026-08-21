@@ -4,6 +4,7 @@ import { sleep } from "../utils/sleep";
 
 const CHUNK_DELAY_MS = 90;
 const AGENT_MENTION = "@agente";
+const AGENT_MENTION_SYNC = "@agente/sync";
 
 const PAYMENT_KEYWORDS = ["pagamento", "pix", "cobranca", "cobrança"];
 const GREETING_KEYWORDS = ["oi", "ola", "olá", "hey", "eae"];
@@ -15,6 +16,10 @@ const GREETING_KEYWORDS = ["oi", "ola", "olá", "hey", "eae"];
  */
 export function mentionsAgent(text: string): boolean {
   return text.toLowerCase().includes(AGENT_MENTION);
+}
+
+export function mentionsAgentSync(text: string): boolean {
+  return text.toLowerCase().includes(AGENT_MENTION_SYNC);
 }
 
 /**
@@ -60,4 +65,9 @@ export async function streamAgentReply(registry: ConnectionRegistry, incomingTex
   }
 
   registry.broadcast({ type: "agent_end", id });
+}
+export async function messageAgentReply(registry: ConnectionRegistry, incomingText: string): Promise<void> {
+  const id = randomUUID();
+  const response = pickReply(incomingText)
+  registry.broadcast({ type: "agent_message", id, text: response})
 }
