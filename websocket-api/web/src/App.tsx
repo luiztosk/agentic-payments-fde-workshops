@@ -3,7 +3,7 @@ import { useChatSocket } from "./useChatSocket";
 import type { Bubble, ConnectionStatus } from "./types";
 
 function App() {
-  const { status, bubbles, onlineUsers, join, sendChat } = useChatSocket();
+  const { status, bubbles, onlineUsers, typingUser, join, sendChat, sendTyping } = useChatSocket();
   const [username, setUsername] = useState("");
   const [hasJoined, setHasJoined] = useState(false);
   const [draft, setDraft] = useState("");
@@ -127,7 +127,10 @@ function App() {
           type="text"
           placeholder="Escreva uma mensagem... (ex: @agente, tudo bem?)"
           value={draft}
-          onChange={(event) => setDraft(event.target.value)}
+          onChange={(event) => {
+            setDraft(event.target.value);
+            sendTyping();
+          }}
           maxLength={500}
           disabled={status !== "open"}
           autoFocus
@@ -136,6 +139,11 @@ function App() {
           Enviar
         </button>
       </form>
+      {typingUser && (
+        <div className="typing-indicator">
+          <span>{typingUser}</span> está digitando...
+        </div>
+      )}
     </main>
   );
 }
