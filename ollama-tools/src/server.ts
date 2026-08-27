@@ -1,4 +1,7 @@
 import express from 'express'
+import morgan from 'morgan'
+import morganBody from 'morgan-body'
+import bodyParser from 'body-parser'
 import { z } from 'zod'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
@@ -35,7 +38,11 @@ function json(value: unknown) {
 }
 
 const app = express()
+
 app.use(express.json())
+// app.use(morgan('dev'))
+app.use(bodyParser.json())
+morganBody(app)
 
 app.post('/mcp', async (req, res) => {
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined })
